@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="./jquery.inputmask.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style media="screen">
+      table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+      html,body{font-family:Verdana,sans-serif;font-size:15px;line-height:1.5;}html{overflow-x:hidden}
+      form {display: block;margin-top: 0em;}
+      .ws-btn {
+    font-size: 17px;
+    font-family: 'Source Sans Pro', sans-serif;
+    border: none;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 6px 18px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #04AA6D;
+    color: #ffffff;
+}
+.classmain input[type=text], .classmain select {
+    width: 100%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+#main {
+    padding: 16px 32px 32px 32px;
+    border-right: 1px solid #f1f1f1;
+}
+#main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ress{
+  display:none;
+}
+#result {
+    padding: 16px 32px 32px 32px;
+    border-right: 1px solid #f1f1f1;
+}
+#result{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* ----Loading----- */
+.loading {
+  margin: auto;
+  width: 80px;
+  height: 80px;
+}
+.loading:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #04aa6d transparent #04aa6d transparent;
+  animation: loading 1.2s linear infinite;
+}
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+.copyright {
+    text-align: center;
+    margin: 0 auto;
+    padding: 10px;
+    color: #999;
+    font-size: 14px;
+}
+#require{
+  color: red;
+  float:right;
+  animation: blinker 1s linear infinite;
+}
+/* ----------Stop Loading--------- */
+    </style>
+  </head>
+  <body>
+    <div class="head" id='main'>
+      <div class="header" style="border-radius:10px;background-color:#f2f2f2;padding:5px;">
+<img src="logodjp.png" alt="">
+      </div>
+    </div>
+    <div class="" id="main">
+    <div style="border-radius:5px;background-color:#f2f2f2;padding:40px;">
+<form action="javascript:key()" class="classmain" id='form'>
+  <label for="npwp">Cek Npwp</label>
+  <input type="text" id="npwp" name="npwp" placeholder="Nomor Pokok Wajib Pajak (NPWP)">
+<a id="button" href="#" onclick="javascript:key()" class="ws-btn w3-block w3-margin-top w3-padding-16">Validasi Npwp »</a>
+<span id='require' style="display:none">︽ Harap Isi Npwp</span>
+</form>
+</div>
+</div>
+<div id="result">
+  <div style="border-radius:5px;background-color:#f2f2f2;padding:40px;width:60%;">
+    <div class="loading" id="loading"></div>
+    <div class="result" id="ress">
+
+    </div>
+  </div>
+</div>
+<div id='main' class="copyright" style="font-weight: bold;font-size: 10px;">
+  <div style="padding:40px;">
+  <span style="color: black;">version <span id="version">1.0</span> build <span id="buildDate">20210923.0520</span>
+  <br><span style="font-size:11px;">Direktorat Jenderal Pajak © 2020</span></span>
+</div></div>
+<script type="text/javascript">
+  $('#result').hide();
+  $('#loading').hide();
+  $("#npwp").inputmask({
+    "mask": "99.999.999.9-999.999"
+});
+document.getElementById("button").addEventListener("click", function() {
+  document.body.style.cursor='progress';
+  // document.getElementById("result").style.display = "";
+  // document.getElementById("loading").style.display = "";
+});
+document.getElementById('form').addEventListener('submit', function(evt){
+  document.body.style.cursor='progress';
+  // document.getElementById("result").style.display = "";
+  // document.getElementById("loading").style.display = "";
+})
+
+function key(){
+  var npwp = document.getElementById("npwp").value;
+  var input = document.getElementById("npwp");
+  var value = input.inputmask.unmaskedvalue();
+  // swal.fire(tabId);
+  //swal.fire(input.inputmask.unmaskedvalue())
+if (value=='' || value.length<15) {
+  // swal.fire('Harap Isi Npwp')
+  // $("#npwp").css("border", "1px solid red");
+  document.getElementById("require").style.display = "";
+}else {
+  document.body.style.cursor='progress';
+  document.getElementById("result").style.display = "";
+  document.getElementById("loading").style.display = "";
+  var tabId = npwp.split("-")[1].split('.')[0];
+$("#npwp").css("border", "1px solid #ccc");
+//---------------------start
+var url = "https://script.google.com/macros/s/AKfycbyOJ9QVzmOoBbAMYt94OoL1yMCkW-utQ7MxlU19e__iulNKQ8Y/exec?npwp="+value
+
+crtable(g(url))
+// $('#result').show();
+  }
+}
+
+// -----
+function load(){
+  $('#result').show();
+  $('#loading').show();
+}
+function g(ur){
+  var x = new XMLHttpRequest();
+  x.open('GET',ur,false);
+  x.send();
+  return JSON.parse(x.responseText)
+}
+function crtable(res){
+  if (res.pesan.includes('Maaf')) {
+    swal.fire(res.pesan)
+    $('#loading').hide();
+    document.body.style.cursor='';
+  }else {
+var tableString = "<table>",body = document.getElementById('ress'),div = document.createElement('div');
+Object.keys(res.data).forEach(function (key) {
+    tableString += "<tr>";
+
+    tableString += "<td>" + key + "</td><td>" + res.data[key] + "</td>";
+
+    tableString += "</tr>";
+
+});
+Object.keys(res.kpp).forEach(function (key) {
+    tableString += "<tr>";
+
+    tableString += "<td>" + key + "</td><td>" + res.kpp[key] + "</td>";
+
+    tableString += "</tr>";
+
+});
+
+tableString += "</table>";
+div.innerHTML = tableString;
+body.appendChild(div);
+$('#loading').hide();
+document.body.style.cursor='';
+}}
+</script>
+  </body>
+</html>
