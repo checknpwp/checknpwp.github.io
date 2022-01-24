@@ -21,7 +21,7 @@
     <meta name="articletype" content="singlepage" />
     <meta name="dtk:subacctype" content="desktop" />
     <meta name="platform" content="desktop" />
-    <meta name="keywords" content="timeless, cara cek npwp aktif atau tidak,cara cek npwp, cara cek npwp online, cara cek npwp online,cek npwp kpp,cek npwp terdaftar di kpp,cek npwp aktif,api npwp,check npwp,cek npwp badan,cek npwp perorangan,cek npwp perusahaan,cek npwp pribadi" itemprop="keywords" />
+    <meta name="keywords" content="timeless, cara cek npwp aktif atau tidak,cara cek npwp, cara cek npwp online, cara cek npwp online,cek npwp kpp,cek npwp terdaftar di kpp,cek npwp aktif,api npwp,check npwp,cek npwp badan,cek npwp perorangan,cek npwp perusahaan,cek npwp pribadi,check npwp perusahaan,check npwp pribadi,check npwp aktif,check npwp,npwp indonesia,kode npwp,arti npwp,efatur,lawan transaksi efaktur" itemprop="keywords" />
     <meta property="og:title" content="Cara Cek NPWP Online"/>
     <meta property="og:url" content="https://checknpwp.github.io"/>
     <meta name="description" content="cek status NPWP terdaftar di kpp mana, untuk badan atau perorangan" />
@@ -188,13 +188,9 @@ tr:nth-child(even) {
 });
 document.getElementById("button").addEventListener("click", function() {
   document.body.style.cursor='progress';
-  // document.getElementById("result").style.display = "";
-  // document.getElementById("loading").style.display = "";
 });
 document.getElementById('form').addEventListener('submit', function(evt){
   document.body.style.cursor='progress';
-  // document.getElementById("result").style.display = "";
-  // document.getElementById("loading").style.display = "";
 })
 
 function key(){
@@ -216,8 +212,8 @@ $("#npwp").css("border", "1px solid #ccc");
 //---------------------start
 var url = "https://script.google.com/macros/s/AKfycbyOJ9QVzmOoBbAMYt94OoL1yMCkW-utQ7MxlU19e__iulNKQ8Y/exec?npwp="+value
 
-crtable(g(url))
-// $('#result').show();
+document.getElementById('ress').innerHTML=''
+g(url)
   }
 }
 
@@ -228,9 +224,22 @@ function load(){
 }
 function g(ur){
   var x = new XMLHttpRequest();
-  x.open('GET',ur,false);
+  x.open('GET',ur);
+  x.onreadystatechange = function () {
+  if(x.readyState === XMLHttpRequest.DONE) {
+    var status = x.status;
+    if (status === 0 || (status >= 200 && status < 400)) {
+      crtable(JSON.parse(x.responseText))
+    } else {
+      swal.fire('Mohon Coba Kembali')
+    }
+  }
+};
+  x.onprogress = function () {
+    $('#load').hide();
+    console.log('LOADING');
+};
   x.send();
-  return JSON.parse(x.responseText)
 }
 function crtable(res){
   if (res.pesan.includes('Maaf')) {
@@ -238,6 +247,9 @@ function crtable(res){
     $('#loading').hide();
     document.body.style.cursor='';
   }else {
+    console.log('Untuk Import Lawan Transaksi Di E-faktur')
+    var ta='"LT","NPWP","NAMA","JALAN","BLOK","NOMOR","RT","RW","KECAMATAN","KELURAHAN","KABUPATEN","PROPINSI","KODE_POS","NOMOR_TELEPON"\n"LT","'+res.data.NPWP+'","'+res.data.NAMA+'","'+res.data.ALAMAT+'","","","","","'+res.data.KECAMATAN+'","'+res.data.KELURAHAN+'","'+res.data.KABKOT.split('KOTA')[1]+'","'+res.data.PROVINSI+'","",""'
+    console.log(ta)
 var tableString = "<table>",body = document.getElementById('ress'),div = document.createElement('div');
 Object.keys(res.data).forEach(function (key) {
     tableString += "<tr>";
